@@ -1,13 +1,12 @@
-
-import './App.css';
+import React from "react";
+import AppRouter from "./components/AppRouter";
+import AuthContextProvider from "./contexts/AuthContext";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-          <h1>assalam alikoum 2</h1>
-      </header>
-    </div>
+    <AuthContextProvider>
+      <AppRouter />
+    </AuthContextProvider>
   );
 }
 
