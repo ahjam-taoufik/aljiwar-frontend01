@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../utils/init-firebase";
+import { auth,app,storage } from "../utils/init-firebase";
 import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
@@ -9,7 +9,10 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile
 } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 
 const AuthContext = createContext({
   currentUser: null,
@@ -23,6 +26,7 @@ const AuthContext = createContext({
 export const useAuth = () => useContext(AuthContext);
 
 export default function AuthContextProvider({ children }) {
+  const firestore = getFirestore(app);
   const [currentUser, setcurrentUser] = useState(null);
 
   useEffect(() => {
@@ -38,8 +42,22 @@ export default function AuthContextProvider({ children }) {
 
 
 
-  function register(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
+  async function  register(email,password,Fname,Lname,Phone,address,facebook,instagram)  {
+   // return createUserWithEmailAndPassword(auth, email, password);
+    //==========================================
+    const userInfo = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    ).then((user) => {
+      return user;
+    });
+    console.log(userInfo.user.uid);
+    const docuRef = doc(firestore, `usersRoles/${userInfo.user.uid}`);
+    setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram});
+    return userInfo;
+   
+    //================================================
   }
   function login(email, password) {
     return signInWithEmailAndPassword(auth,email,password)
@@ -78,3 +96,17 @@ export default function AuthContextProvider({ children }) {
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export async function upload(file,currentUser,setLoading){
+  const fileRef=ref(storage,currentUser.uid+'.png');
+  setLoading(true);
+  const snapshot=await uploadBytes(fileRef,file);
+
+  const photoURL=await getDownloadURL(fileRef)
+
+  updateProfile(currentUser,{photoURL:photoURL})
+  setLoading(false)
+  alert("Uploaded file !");
+}
+
+

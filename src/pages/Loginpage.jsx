@@ -8,11 +8,9 @@ import {
   Input,
   Stack,
   useToast,
-  Text,
-  Box,
-  Flex,
+
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { Link, useHistory } from "react-router-dom";

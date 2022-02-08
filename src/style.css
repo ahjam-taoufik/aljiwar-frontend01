@@ -1,0 +1,13 @@
+.avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    flex: 1;
+    flex-direction: row;
+  }
+
+.button{
+    flex: 1;
+    flex-direction: row;
+  }

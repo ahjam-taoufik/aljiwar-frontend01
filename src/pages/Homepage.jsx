@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   OrderedList,
-  Tag,
   Text,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -22,7 +21,7 @@ export default function Homepage() {
       <Text my={6}>{`the current User is ${currentUser}`}</Text>
 
       <Heading>
-        Firebase Authentication
+        ASSOCIATION ALJIWAR
         <chakra.span
           fontWeight='black'
           fontStyle='italic'

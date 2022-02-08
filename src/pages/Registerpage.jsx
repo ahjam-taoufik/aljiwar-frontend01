@@ -9,7 +9,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { Card } from "../components/Card";
@@ -22,6 +22,12 @@ export default function Registerpage() {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [Fname, setFname] = useState("");
+  const [Lname, setLname] = useState("");
+  const [Phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
   const [isSubmiting, setIsSubmiting] = useState(false);
   const toast = useToast();
   const {register,signInWithGoogle} =useAuth()
@@ -47,7 +53,7 @@ export default function Registerpage() {
               })
             }
             setIsSubmiting(true)
-            register(email,password)
+            register(email,password,Fname,Lname,Phone,address,facebook,instagram)
             .then(res=>console.log(res))
             .catch(err=>{
               console.log(err.message)
@@ -64,6 +70,80 @@ export default function Registerpage() {
           }}
         >
           <Stack spacing="6">
+
+            <FormControl id="Fname">
+              <FormLabel>First Name</FormLabel>
+              <Input
+                name="Fname"
+                type="text"
+                // autoComplete="email"
+                value={Fname}
+                onChange={(e) => setFname(e.target.value)}
+                required
+              />
+            </FormControl>
+
+            <FormControl id="Lname">
+              <FormLabel>Last Name</FormLabel>
+              <Input
+                name="Lname"
+                type="text"
+                // autoComplete="email"
+                value={Lname}
+                onChange={(e) => setLname(e.target.value)}
+                required
+              />
+            </FormControl>
+
+            <FormControl id="Phone">
+              <FormLabel>Phone</FormLabel>
+              <Input
+                name="Phone"
+                type="text"
+                // autoComplete="email"
+                value={Phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </FormControl>
+
+            <FormControl id="address">
+              <FormLabel>Address</FormLabel>
+              <Input
+                name="address"
+                type="text"
+                // autoComplete="email"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </FormControl>
+
+            <FormControl id="facebook">
+              <FormLabel>facebook</FormLabel>
+              <Input
+                name="facebook"
+                type="text"
+                // autoComplete="email"
+                value={facebook}
+                onChange={(e) => setFacebook(e.target.value)}
+                // required
+              />
+            </FormControl>
+
+            <FormControl id="instagram">
+              <FormLabel>instagram</FormLabel>
+              <Input
+                name="instagram"
+                type="text"
+                // autoComplete="email"
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
+                // required
+              />
+            </FormControl>
+
+           
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
               <Input
@@ -75,6 +155,7 @@ export default function Registerpage() {
                // required
               />
             </FormControl>
+
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
               <Input
@@ -86,6 +167,7 @@ export default function Registerpage() {
                // required
               />
             </FormControl>
+
             <Button
               isLoading={isSubmiting}
               type="submit"
