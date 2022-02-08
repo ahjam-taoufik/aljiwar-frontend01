@@ -18,7 +18,8 @@ import {
   Button,
   Input,
   FormControl,
-  FormLabel
+  FormLabel,
+  Spacer
 } from "@chakra-ui/react";
 //import { Card } from '../components/Card'
 import { useAuth,upload } from "../contexts/AuthContext";
@@ -62,45 +63,53 @@ export default function Profilepage() {
     <Layout>
       <Flex
         direction={isNotSmallerScreen ? "row" : "column"}
-        w="100%"
-        maxWidth={{ base: "100vh", md: "13vh", lg: "13vh", xl: "130vh" }}
+        // w="100%"
+        // maxWidth={{ base: "10vh", md: "13vh", lg: "13vh", xl: "13vh" }}
       >
-        <Box alignSelf="center" px="32" py="10">
-          <Badge colorScheme="green" fontSize="lg" mx={4}>
+        <Box
+         alignSelf="center" px="32" mb="40"
+         >
+          <Badge colorScheme="green" fontSize="lg"  mx={4}>
             {currentUser.email}
           </Badge>
           <IconButton icon={<FaFacebook />} isRound="true" mx="5" my="10" onClick={
             ()=>window.open("https://www.facebook.com/")
           } ></IconButton>
           <IconButton icon={<FaInstagram />} isRound="true" mx="5" my="10"></IconButton>
-        </Box>
+          <Text fontSize="2xl" color="gray.400"  align="center">
+            Ahjam Taoufik 
+          </Text>
+          <Text fontSize="2xl" color="gray.400" align="center"   my="3">
+            your Phone
+          </Text>
+          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
+              your address
+          </Text>
 
+          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
+              your Role
+          </Text>
+
+          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
+              your Professional
+          </Text>
+
+        </Box>
+      
         <Box alignSelf="center" px="32" py="16">
-          <Flex direction={isNotSmallerScreen ? "row" : "column"} mt={8}>
+        
             <Flex
               rounded="xl"
               direction="column"
-              mt={4}
+              mt={40}
              
               ml={isNotSmallerScreen ? 4 : 0}
               h="30vh"
               w="30vh"
               justify="flex-end"
             >
-              {/* <Circle
-                position="absolute"
-                bg="blue.500"
-                opacity="0.1"
-                w="300px"
-                h="300px"
-                alignSelf={isNotSmallerScreen ? "flex-end" : "center"}
-                mt="5"
-              /> */}
-  {/* // ========image===============            */}
-         
-
-
-             <FormControl id="Fname" >
+  {/* // ========image===============            */}  
+             <FormControl id="Fname"  >
               <Input
                 name="imageUpload"
                 type="file"
@@ -109,7 +118,6 @@ export default function Profilepage() {
                // required
               />
             </FormControl>
-   
             <Button
               disabled={!photo}
               isLoading={loading }
@@ -127,40 +135,10 @@ export default function Profilepage() {
                     mb={isNotSmallerScreen ? "0" : "12"} borderRadius='50%'
                     backgroundColor="transparent" boxShadow="lg"
                     boxSize="300px" src={photoURL} />
- 
-       
-         
-
-          
   {/* // ===========image============            */}
-            
             </Flex>
-          </Flex>
-         
-          <Text fontSize="2xl" color="gray.400"  align={isNotSmallerScreen ? "left" : "center"}>
-            Ahjam Taoufik 
-          </Text>
         </Box>
-      
       </Flex>
-
-      <Box mr={isNotSmallerScreen ? "500" : ""}>
-      <Text fontSize="2xl" color="gray.400" align="center"   my="3">
-            your Phone
-      </Text>
-      <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-           your address
-      </Text>
-
-      <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-           your Role
-      </Text>
-
-      <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-           your Professional
-      </Text>
-      </Box>
-
     </Layout>
   );
 
