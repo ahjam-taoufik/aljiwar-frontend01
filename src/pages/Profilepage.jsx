@@ -17,7 +17,8 @@ import {
   Image,
   Button,
   Input,
-  FormControl
+  FormControl,
+  FormLabel
 } from "@chakra-ui/react";
 //import { Card } from '../components/Card'
 import { useAuth,upload } from "../contexts/AuthContext";
@@ -80,6 +81,7 @@ export default function Profilepage() {
               rounded="xl"
               direction="column"
               mt={4}
+             
               ml={isNotSmallerScreen ? 4 : 0}
               h="30vh"
               w="30vh"
@@ -95,9 +97,10 @@ export default function Profilepage() {
                 mt="5"
               /> */}
   {/* // ========image===============            */}
- 
+         
+
+
              <FormControl id="Fname" >
-              {/* <FormLabel>First Name</FormLabel> */}
               <Input
                 name="imageUpload"
                 type="file"
@@ -120,11 +123,12 @@ export default function Profilepage() {
               Upload
             </Button>
 
-            <Image  alignSelf="center" mt={isNotSmallerScreen ? "0" : "12"}
-                    mb={isNotSmallerScreen ? "0" : "12"} borderRadius='full'
+            <Image  alignSelf="center" mt={isNotSmallerScreen ? "0" : "120"}
+                    mb={isNotSmallerScreen ? "0" : "12"} borderRadius='50%'
                     backgroundColor="transparent" boxShadow="lg"
                     boxSize="300px" src={photoURL} />
-           
+ 
+       
          
 
           
