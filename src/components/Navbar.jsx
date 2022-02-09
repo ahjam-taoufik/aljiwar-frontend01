@@ -24,7 +24,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 export function Navbar() {
   const { toggleColorMode } = useColorMode();
   const { logOut, currentUser } = useAuth();
-
+ 
   return (
     <Box
       borderBottom="2px"

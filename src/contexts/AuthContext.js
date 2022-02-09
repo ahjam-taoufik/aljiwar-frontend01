@@ -11,11 +11,14 @@ import {
   signOut,
   updateProfile
 } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import { db } from "../utils/init-firebase";
+
 
 const AuthContext = createContext({
   currentUser: null,
+  userInformation:null,
   register: () => Promise,
   login: () => Promise,
   logOut: () => Promise,
@@ -23,22 +26,36 @@ const AuthContext = createContext({
   forgotPassword: () => Promise,
   resetPassword: () => Promise,
 
-});
+}); 
 export const useAuth = () => useContext(AuthContext);
 
 export default function AuthContextProvider({ children }) {
   const firestore = getFirestore(app);
   const [currentUser, setcurrentUser] = useState(null);
+  const [userInformation, setUserInfo] = useState(null);
 
   useEffect(() => {
    const unsubscribe= onAuthStateChanged(auth,user=>{
         setcurrentUser(user)
-    })
+      })
+      getUser()
   
     return () => {
       unsubscribe()
     };
-  }, []);
+  }, [currentUser]);
+
+
+  const getUser= ()=>{
+    if (currentUser ) {
+      // fetching a single document
+      const docRef = doc(db, "usersRoles", currentUser.uid);
+           getDoc(docRef).then(function(doc){
+         setUserInfo(doc.data());
+        //console.log("dataa:", doc.data());
+      });
+    }
+  }
   
 
 
@@ -53,7 +70,7 @@ export default function AuthContextProvider({ children }) {
     ).then((user) => {
       return user;
     });
-    console.log(userInfo.user.uid);
+    //console.log(userInfo.user.uid);
     const docuRef = doc(firestore, `usersRoles/${userInfo.user.uid}`);
     setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram,gender:gender,dateNaissance:dateNaissance});
     return userInfo;
@@ -71,7 +88,8 @@ export default function AuthContextProvider({ children }) {
 
   function forgotPassword(email){
     return sendPasswordResetEmail(auth,email,{
-      url:'http://localhost:3000/login',
+      // url:'http://localhost:3000/login',
+      url:'https://aljiwar-v1.netlify.app/login',
     })
   }
 
@@ -87,6 +105,7 @@ export default function AuthContextProvider({ children }) {
 
   const value = {
     currentUser,
+    userInformation,
     register,
     login,
     logOut,
@@ -109,6 +128,24 @@ export async function upload(file,currentUser,setLoading){
   setLoading(false)
   alert("Uploaded file !");
 }
+
+
+// ==============getUser async============================
+// const getOneUser= async ()=> {
+//     let aa=null
+//    const docRef = doc(db, "usersRoles", currentUser.uid);
+//    const docSnap = await getDoc(docRef);
+   
+//    if (docSnap.exists()) {
+//       //console.log("Document data:", docSnap.data());
+//       docSnap.data()
+//     } else {
+//       // doc.data() will be undefined in this case
+//       //console.log("No such document!");
+//     }
+//     return aa
+//   }
+//=========================================
 
 
 
