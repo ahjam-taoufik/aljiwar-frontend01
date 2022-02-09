@@ -22,6 +22,7 @@ const AuthContext = createContext({
   signInWithGoogle: () => Promise,
   forgotPassword: () => Promise,
   resetPassword: () => Promise,
+
 });
 export const useAuth = () => useContext(AuthContext);
 
@@ -42,7 +43,7 @@ export default function AuthContextProvider({ children }) {
 
 
 
-  async function  register(email,password,Fname,Lname,Phone,address,facebook,instagram)  {
+  async function  register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance)  {
    // return createUserWithEmailAndPassword(auth, email, password);
     //==========================================
     const userInfo = await createUserWithEmailAndPassword(
@@ -54,7 +55,7 @@ export default function AuthContextProvider({ children }) {
     });
     console.log(userInfo.user.uid);
     const docuRef = doc(firestore, `usersRoles/${userInfo.user.uid}`);
-    setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram});
+    setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram,gender:gender,dateNaissance:dateNaissance});
     return userInfo;
    
     //================================================
@@ -78,12 +79,11 @@ export default function AuthContextProvider({ children }) {
    return confirmPasswordReset(auth,oobCode,newPassword)
  }
 
-
-
   function logOut(email, password) {
     return signOut(auth)
   }
-  
+
+
 
   const value = {
     currentUser,
@@ -92,7 +92,8 @@ export default function AuthContextProvider({ children }) {
     logOut,
     signInWithGoogle,
     forgotPassword,
-    resetPassword
+    resetPassword,
+
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -108,5 +109,7 @@ export async function upload(file,currentUser,setLoading){
   setLoading(false)
   alert("Uploaded file !");
 }
+
+
 
 

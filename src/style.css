@@ -11,3 +11,10 @@
     flex: 1;
     flex-direction: row;
   } */
+
+.borderpicker{
+  border: 2px solid rgb(201, 199, 199);
+  border-radius: 4px;
+  width: 100%;
+  height: fit-content;
+}

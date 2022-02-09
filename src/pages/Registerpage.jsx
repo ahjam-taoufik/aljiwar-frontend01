@@ -6,6 +6,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  Select,
   Stack,
   useToast,
 } from "@chakra-ui/react";
@@ -17,7 +18,9 @@ import DividerWithText from "../components/DividerWithText";
 import { Layout } from "../components/Layout";
 import {useAuth} from '../contexts/AuthContext'
 import useMounted from './../hooks/useMounted';
-
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import '../style.css'
 export default function Registerpage() {
   const history = useHistory();
   const [email, setEmail] = useState("");
@@ -26,13 +29,14 @@ export default function Registerpage() {
   const [Lname, setLname] = useState("");
   const [Phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [gender, setGender] = useState("");
+  const [dateNaissance, setDateNaissance] = useState("");
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [isSubmiting, setIsSubmiting] = useState(false);
   const toast = useToast();
   const {register,signInWithGoogle} =useAuth()
   const mounted = useMounted()
-
   return (
     <Layout>
       <Heading textAlign="center" my={12}>
@@ -53,7 +57,7 @@ export default function Registerpage() {
               })
             }
             setIsSubmiting(true)
-            register(email,password,Fname,Lname,Phone,address,facebook,instagram)
+            register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance)
             .then(res=>console.log(res))
             .catch(err=>{
               console.log(err.message)
@@ -118,6 +122,40 @@ export default function Registerpage() {
                 required
               />
             </FormControl>
+            <FormControl id="gender">
+              <FormLabel>gender</FormLabel>
+              <Select placeholder='Select option' 
+              value={gender} 
+              onChange={(e) => setGender(e.target.value)}
+              >
+                <option value='male'>male</option>
+                <option value='female'>female</option>
+            </Select>
+            
+            </FormControl>
+            <FormControl id="dateNaissance">
+              <FormLabel>date Naissance</FormLabel>
+           
+               <DatePicker 
+                 selected={dateNaissance}
+                 onChange={ date => setDateNaissance(date)}
+                 dateFormat='dd/MM/yyyy'
+                 isClearable
+                 showYearDropdown
+                 scrollableMonthYearDropdown
+                 className="borderpicker"
+               />
+            
+              {/* <Input
+                name="dateNaissance"
+                type="text"
+                // autoComplete="email"
+                value={dateNaissance}
+                onChange={(e) => setDateNaissance(e.target.value)}
+                required
+              /> */}
+            </FormControl>
+
 
             <FormControl id="facebook">
               <FormLabel>facebook</FormLabel>

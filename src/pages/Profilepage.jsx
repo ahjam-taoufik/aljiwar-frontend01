@@ -27,18 +27,35 @@ import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
 import { DiCodeigniter, DiAndroid, DiWebplatform } from "react-icons/di";
 import { Link } from "react-router-dom";
 import ProfileImage from './../components/ProfileImage';
-
-
-
+import { db } from "../utils/init-firebase";
+import { doc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
+import moment from "moment";
+import convertDate from './../utils/moment';
 export default function Profilepage() {
   const { currentUser } = useAuth();
   const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+  const [userInfo, setUserInfo] = useState(null);
   const [isNotSmallerScreen] = useMediaQuery("(min-width: 600px)");
-  //console.log(isSmaller);
-  
+   convertDate()
+//==========================================
+
+function getUser(){
+  if (currentUser) {
+      // fetching a single document (& realtime)
+  const docRef = doc(db, 'usersRoles', currentUser.uid)
+  getDoc(docRef)
+    .then(doc => {
+      setUserInfo(doc.data())
+      console.log('dataa:', doc.data())
+    })
+  }
+}
+
+
+//========================================
   function handleChange(e){
     if (e.target.files[0]) {
       setPhoto(e.target.files[0])
@@ -55,9 +72,16 @@ export default function Profilepage() {
     if (currentUser?.photoURL) {
       setPhotoURL(currentUser.photoURL);
     }
+
+    if (currentUser) {
+     
+      getUser()
+    }
+
+
   }, [currentUser])
 
-
+ //console.log(userInfo);
 
   return (
     <Layout>
@@ -70,29 +94,38 @@ export default function Profilepage() {
          alignSelf="center" px="32" mb="40"
          >
           <Badge colorScheme="green" fontSize="lg"  mx={4}>
-            {currentUser.email}
+            {currentUser?.email}
           </Badge>
           <IconButton icon={<FaFacebook />} isRound="true" mx="5" my="10" onClick={
             ()=>window.open("https://www.facebook.com/")
           } ></IconButton>
           <IconButton icon={<FaInstagram />} isRound="true" mx="5" my="10"></IconButton>
           <Text fontSize="2xl" color="gray.400"  align="center">
-            Ahjam Taoufik 
+          {userInfo?.Fname} {userInfo?.Lname} 
           </Text>
           <Text fontSize="2xl" color="gray.400" align="center"   my="3">
-            your Phone
+            {userInfo?.Phone}
           </Text>
           <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-              your address
+          {userInfo?.address}
+          </Text>
+          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
+          {userInfo?.gender}
+          </Text>
+          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
+          {/* {  userInfo?.dateNaissance}  */}
+         {  moment(userInfo?.dateNaissance.toDate()).format('L')}
+      
+          
+       
+         
           </Text>
 
           <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-              your Role
+          {userInfo?.role}
           </Text>
 
-          <Text fontSize="2xl" color="gray.400" align="center"  my="3">
-              your Professional
-          </Text>
+         
 
         </Box>
       
@@ -139,6 +172,15 @@ export default function Profilepage() {
             </Flex>
         </Box>
       </Flex>
+
+      
+
+   <Container maxW='container.lg' overflowX='auto' py={4}>
+   <chakra.pre>
+     {JSON.stringify(currentUser,null,2)}
+   </chakra.pre>
+</Container> 
+
     </Layout>
   );
 
