@@ -118,8 +118,8 @@ return () => {
 
   function forgotPassword(email){
     return sendPasswordResetEmail(auth,email,{
-     // url:'http://localhost:3000/login',
-       url:'https://aljiwar-v1.netlify.app/login',
+      url:'http://localhost:3000/login',
+     //  url:'https://aljiwar-v1.netlify.app/login',
     })
   }
  function resetPassword(oobCode,newPassword){
