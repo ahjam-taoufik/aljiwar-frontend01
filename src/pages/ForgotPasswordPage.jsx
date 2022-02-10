@@ -15,6 +15,7 @@ import { Card } from "../components/Card";
 import DividerWithText from "../components/DividerWithText";
 import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
+import { handleError } from "./../utils/handleError";
 
 export default function ForgotPasswordPage() {
   const history = useHistory();
@@ -32,7 +33,7 @@ export default function ForgotPasswordPage() {
           onSubmit={async (e) => {
             e.preventDefault();
             // your forgot password logic here
-            if (!email ) {
+            if (!email) {
               toast({
                 description: "email not valid",
                 status: "error",
@@ -44,23 +45,24 @@ export default function ForgotPasswordPage() {
               .then((res) => {
                 console.log(res);
                 toast({
-                description: "Email sent , check your email",
-                status: "success",
-                duration: "4000",
-                isClosable: true,
-              });
-                
-              })
-              .catch((err) => {
-                console.log(err.message);
-                toast({
-                  description: err.message,
-                  status: "error",
+                  description: "Email sent , check your email",
+                  status: "success",
                   duration: "4000",
                   isClosable: true,
                 });
               })
-            
+              .catch((err) => {
+                //console.log(err.message);
+                const error = err.message;
+                let message = handleError(error);
+                toast({
+                  description: message || error,
+                  status: "error",
+                  duration: "4000",
+                  position: "top-right",
+                  isClosable: true,
+                });
+              });
 
             //=========================
           }}

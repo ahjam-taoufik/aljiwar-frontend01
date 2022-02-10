@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Center,
   chakra,
@@ -10,7 +11,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { Card } from "../components/Card";
@@ -21,6 +22,11 @@ import useMounted from './../hooks/useMounted';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
+import { handleError } from './../utils/handleError';
+import { City }  from 'country-state-city';
+
+
+
 export default function Registerpage() {
   const history = useHistory();
   const [email, setEmail] = useState("");
@@ -34,9 +40,37 @@ export default function Registerpage() {
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [countryCode, setcountryCode] = useState("");
+  const [allCities, setallCities] = useState([]);
+
   const toast = useToast();
-  const {register,signInWithGoogle} =useAuth()
+  const {register,signInWithGoogle,allCountry} =useAuth()
   const mounted = useMounted()
+
+   
+useEffect(() => {
+  
+}, []);
+ 
+  
+  const handleCities=()=>{
+    let str=""
+   
+       str = country;
+      str = str.substring(str.length - 2);          
+      setcountryCode(str)
+       console.log("countryCode:",countryCode);
+      
+      setallCities(City.getCitiesOfCountry(str))
+
+     // console.log(City.getCitiesOfCountry(str));    
+     // console.log(allCities);    
+  }
+
+
+
   return (
     <Layout>
       <Heading textAlign="center" my={12}>
@@ -50,21 +84,25 @@ export default function Registerpage() {
             // console.log(email,password)
             if(!email || !password){
               toast({
-                  description:'credentials not valid',
+                  description:'veuillez renseigner les champs email et mot de passe',
                   status:"error",
                   duration: '4000',
-                  isClosable:true
+                  isClosable:true,
+                  position:'top-right',
               })
             }
             setIsSubmiting(true)
-            register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance)
+            register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance,country,city)
             .then(res=>console.log(res))
             .catch(err=>{
-              console.log(err.message)
-              toast({
-                  description:err.message,
+             // console.log(err.message)
+              const error=err.message
+                let message=handleError(error)
+                toast({
+                  description: message || error,
                   status:"error",
                   duration: '4000',
+                  position:'top-right',
                   isClosable:true
               })
             })
@@ -76,7 +114,7 @@ export default function Registerpage() {
           <Stack spacing="6">
 
             <FormControl id="Fname">
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>First Name<Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="Fname"
                 type="text"
@@ -88,7 +126,7 @@ export default function Registerpage() {
             </FormControl>
 
             <FormControl id="Lname">
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel>Last Name<Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="Lname"
                 type="text"
@@ -100,7 +138,7 @@ export default function Registerpage() {
             </FormControl>
 
             <FormControl id="Phone">
-              <FormLabel>Phone</FormLabel>
+              <FormLabel>Phone <Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="Phone"
                 type="text"
@@ -112,7 +150,7 @@ export default function Registerpage() {
             </FormControl>
 
             <FormControl id="address">
-              <FormLabel>Address</FormLabel>
+              <FormLabel>Address <Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="address"
                 type="text"
@@ -122,19 +160,61 @@ export default function Registerpage() {
                 required
               />
             </FormControl>
+
             <FormControl id="gender">
-              <FormLabel>gender</FormLabel>
+              <FormLabel>gender<Badge colorScheme="red">Required</Badge></FormLabel>
               <Select placeholder='Select option' 
               value={gender} 
               onChange={(e) => setGender(e.target.value)}
+              required
               >
                 <option value='male'>male</option>
                 <option value='female'>female</option>
             </Select>
-            
             </FormControl>
+{/* ================Country===================================== */}
+              <FormControl id="country">
+              <FormLabel>country<Badge colorScheme="red">Required</Badge></FormLabel>
+              <Select placeholder='Select option' 
+               value={country} 
+              onChange={(e) => {setCountry(e.target.value)}}
+              onClick={()=>setallCities([])}
+              required
+              >
+              { allCountry?.map((country)=>{
+                                           
+                    return <option value={`${country.name}-${country.isoCode}`}>{`${country.name}-${country.isoCode}`}</option>
+               })}
+            </Select>
+            </FormControl>
+{/* =====================Button================================ */}
+              <Button
+               isLoading={isSubmiting}
+              // type="submit"
+              colorScheme="primary"
+              size="lg"
+              fontSize="md"
+              onClick={handleCities}
+            >
+              load city
+            </Button>
+{/* ================city===================================== */}
+              <FormControl id="city">
+              <FormLabel>city<Badge colorScheme="red">Required</Badge></FormLabel>
+              <Select placeholder='Select option' 
+               value={city} 
+              onChange={(e) => setCity(e.target.value)}   
+              required     
+              >
+              { allCities?.map((c)=>{
+                                                 
+                    return <option value={c.name}>{c.name}</option>
+               })}
+            </Select>
+            </FormControl>
+{/* ===================================================== */}
             <FormControl id="dateNaissance">
-              <FormLabel>date Naissance</FormLabel>
+              <FormLabel>date Naissance <Badge colorScheme="red">Required</Badge></FormLabel>
            
                <DatePicker 
                  selected={dateNaissance}
@@ -144,6 +224,7 @@ export default function Registerpage() {
                  showYearDropdown
                  scrollableMonthYearDropdown
                  className="borderpicker"
+                 required
                />
             
               {/* <Input
@@ -157,8 +238,10 @@ export default function Registerpage() {
             </FormControl>
 
 
+            
+
             <FormControl id="facebook">
-              <FormLabel>facebook</FormLabel>
+              <FormLabel>facebook <Badge colorScheme="green">optional</Badge></FormLabel>
               <Input
                 name="facebook"
                 type="text"
@@ -170,7 +253,7 @@ export default function Registerpage() {
             </FormControl>
 
             <FormControl id="instagram">
-              <FormLabel>instagram</FormLabel>
+              <FormLabel>instagram <Badge colorScheme="green">optional</Badge></FormLabel>
               <Input
                 name="instagram"
                 type="text"
@@ -183,7 +266,7 @@ export default function Registerpage() {
 
            
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
+              <FormLabel>Email address <Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="email"
                 type="email"
@@ -195,7 +278,7 @@ export default function Registerpage() {
             </FormControl>
 
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Password <Badge colorScheme="red">Required</Badge></FormLabel>
               <Input
                 name="password"
                 type="password"

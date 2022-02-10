@@ -6,7 +6,6 @@ import {
   Redirect,
 } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-// import { Redirect } from 'react-router-dom/cjs/react-router-dom.min'
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import Homepage from "../pages/Homepage";
 import Loginpage from "../pages/Loginpage";
@@ -16,7 +15,6 @@ import ProtectedPage from "../pages/ProtectedPage";
 import Registerpage from "../pages/Registerpage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import { useAuth } from "./../contexts/AuthContext";
-import { useState,useEffect } from "react";
 
 export default function AppRouter(props) {
 
@@ -71,14 +69,12 @@ function ProtectedRoute(props) {
 
 
 function ProtectedRouteAdmin(props) {
-  const { currentUser,userInformation } = useAuth();
+  const { userInformation } = useAuth();
   const { path } = props;
   const location=useLocation()
   //console.log(currentUser);
-  console.log(userInformation.role);
+  //console.log(userInformation.role);
 
- 
-  
 
   if(path==='/protected-page' ){
     // console.log('okok',userInfo);

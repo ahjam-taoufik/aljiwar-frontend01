@@ -3,59 +3,31 @@ import { Layout } from "../components/Layout";
 import { useEffect } from "react";
 import {
   Badge,
-  chakra,
-  Container,
-  Heading,
-  IconButton,
-  Stack,
-  Circle,
   Flex,
   useMediaQuery,
   Text,
   Box,
-  Icon,
   Image,
   Button,
   Input,
   FormControl,
-  FormLabel,
-  Spacer,
+
 } from "@chakra-ui/react";
-//import { Card } from '../components/Card'
+
 import { useAuth, upload } from "../contexts/AuthContext";
-import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
-import { DiCodeigniter, DiAndroid, DiWebplatform } from "react-icons/di";
-import { Link } from "react-router-dom";
-import ProfileImage from "./../components/ProfileImage";
-import { db } from "../utils/init-firebase";
-import { doc, firestore } from "firebase/firestore";
-import { getDoc } from "firebase/firestore";
 import moment from "moment";
 import convertDate from "./../utils/moment";
 export default function Profilepage() {
-  const { currentUser } = useAuth();
+  const { currentUser,userInformation } = useAuth();
   const [photoURL, setPhotoURL] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
   );
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+
   const [isNotSmallerScreen] = useMediaQuery("(min-width: 600px)");
   convertDate();
 
-
-
-  const getUser= async()=>{
-    if (currentUser) {
-      // fetching a single document
-      const docRef =await doc(db, "usersRoles", currentUser.uid);
-      getDoc(docRef).then(function(doc){
-        setUserInfo(doc.data());
-       // console.log("dataa:", doc.data());
-      });
-    }
-  }
-  //========================================
   function handleChange(e) {
     if (e.target.files[0]) {
       setPhoto(e.target.files[0]);
@@ -71,12 +43,9 @@ export default function Profilepage() {
       setPhotoURL(currentUser.photoURL);
     }
 
-    if (currentUser) {
-      getUser();
-    }
   }, [currentUser]);
 
-  //console.log(userInfo);
+
 
   return (
     <Layout>
@@ -107,19 +76,19 @@ export default function Profilepage() {
             Nom et Prenom :
           </Badge>
           <Text fontSize="2xl" color="gray.400">
-            {userInfo?.Fname} {userInfo?.Lname}
+            {userInformation?.Fname} {userInformation?.Lname}
           </Text>
           <Badge colorScheme="blue" fontSize="lg">
             téléphone :
           </Badge>
           <Text fontSize="2xl" color="gray.400" align="left" my="3">
-            {userInfo?.Phone}
+            {userInformation?.Phone}
           </Text>
           <Badge colorScheme="blue" fontSize="lg">
             Address :
           </Badge>
           <Text fontSize="2xl" color="gray.400" align="left" my="3">
-            {userInfo?.address}
+            {userInformation?.address}
           </Text>
 
           <Badge colorScheme="blue" fontSize="lg">
@@ -127,15 +96,30 @@ export default function Profilepage() {
           </Badge>
           <Text fontSize="2xl" color="gray.400" align="left" my="3">
             {/* {  userInfo?.dateNaissance}  */}
-            {moment(userInfo?.dateNaissance.toDate()).format("L")}
+            {moment(userInformation?.dateNaissance.toDate()).format("L")}
+          </Text>
+
+          <Badge colorScheme="blue" fontSize="lg">
+            Pays :
+          </Badge>
+          <Text fontSize="2xl" color="gray.400" align="left" my="3">
+            {userInformation?.country}
+          </Text>
+
+          <Badge colorScheme="blue" fontSize="lg">
+            Ville :
+          </Badge>
+          <Text fontSize="2xl" color="gray.400" align="left" my="3">
+            {userInformation?.city}
           </Text>
 
           <Badge colorScheme="blue" fontSize="lg">
             Role :
           </Badge>
           <Text fontSize="2xl" color="gray.400" align="left" my="3">
-            {userInfo?.role}
+            {userInformation?.role}
           </Text>
+
         </Box>
 
         <Box alignSelf="center" px="32" py="16">

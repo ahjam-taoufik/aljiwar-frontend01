@@ -19,6 +19,7 @@ import DividerWithText from "../components/DividerWithText";
 import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import useMounted from "../hooks/useMounted";
+import { handleError } from './../utils/handleError';
 
 export default function Loginpage() {
   const history = useHistory();
@@ -46,6 +47,7 @@ export default function Loginpage() {
                 description: "credentials not valid",
                 status: "error",
                 duration: "4000",
+                position:'top-right',
                 isClosable: true,
               });
             }
@@ -53,14 +55,23 @@ export default function Loginpage() {
             login(email, password)
               .then((res) => {
                 console.log(res);
+                toast({
+                description: "Login avec success",
+                status: "success",
+                duration: "2000",
+                position:'top-right',
+                isClosable: true,
+              });
                 history.push(location.state?.from ?? "/profile");
               })
               .catch((err) => {
-                console.log(err.message);
+                const error=err.message
+                let message=handleError(error)
                 toast({
-                  description: err.message,
+                  description: message || error,
                   status: "error",
-                  duration: "4000",
+                  duration: "6000",
+                  position:'top-right',
                   isClosable: true,
                 });
               })

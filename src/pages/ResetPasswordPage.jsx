@@ -45,6 +45,7 @@ export default function ResetPasswordPage() {
                   description:'Password has been changed,you can login now',
                   status:'success',
                   duration:'5000',
+                  position:'top-right',
                   isClosable:true,
                 })
                  history.push('/login')

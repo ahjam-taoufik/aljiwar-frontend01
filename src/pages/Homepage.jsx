@@ -28,7 +28,7 @@ export default function Homepage() {
           fontSize='9xl'
           mx={2}
         >
-          v9
+          v1
         </chakra.span>
         <Badge
           fontWeight='black'

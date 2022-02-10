@@ -12,6 +12,7 @@ export default function ProtectedPage() {
   const colRef=collection(firestore,'usersRoles')
   const [loading,setLoading]=useState(true)
   const [users,setusers]=useState([])
+  const [aa,setaa]=useState([])
 
 
   useEffect(() => {
@@ -24,31 +25,29 @@ export default function ProtectedPage() {
         snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
         })
-        console.log(users);
+       // console.log(users);
         setusers(users);
         setLoading(false);
       })
     }
     subscriber();
+
     return () => {
       subscriber();
  };
 
   }, [loading]);
 
-  
-  
   if (loading) {
     return <h1>loading  data...</h1>;
   }
 
-
   return (
     <Layout>
       <Heading>
-        Protected page
+        ADMIN page
         <Badge colorScheme='green' fontSize='lg' mx={4}>
-          Protected Page
+          admin Page
         </Badge>
       </Heading>
       <Container maxW='container.lg' overflowX='auto' py={4}>

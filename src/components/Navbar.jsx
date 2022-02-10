@@ -3,10 +3,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
   Box,
   HStack,
   IconButton,
@@ -20,11 +16,15 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import Navlink from "./Navlink";
 import { useAuth } from "./../contexts/AuthContext";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import logo from '../img/aljiwar.png'
+import '../style.css'
+
 
 export function Navbar() {
   const { toggleColorMode } = useColorMode();
-  const { logOut, currentUser } = useAuth();
- 
+  const { logOut, currentUser,userInformation } = useAuth();
+   
+
   return (
     <Box
       borderBottom="2px"
@@ -32,6 +32,7 @@ export function Navbar() {
       mb={4}
     >
       <HStack py={4} justifyContent="flex-end" maxW="container.lg" mx="auto">
+        <img src={logo} alt="Logo" className="logo" />
         <Navlink to="/" name="ALJIWAR" size="lg" />
         <Spacer />
 
@@ -43,11 +44,11 @@ export function Navbar() {
             </MenuButton>
             <MenuList>
               <MenuItem>
-                <Navlink to="/profile" name="Profile" />
+               <Navlink to="/profile" name="Profile" />
               </MenuItem>
 
               <MenuItem>
-                 <Navlink to="/protected-page" name="Protected" />
+              {userInformation?.role==='admin' &&  <Navlink to="/protected-page" name="Protected" />}  
               </MenuItem>
 
 

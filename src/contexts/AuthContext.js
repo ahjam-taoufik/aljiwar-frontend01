@@ -14,11 +14,12 @@ import {
 import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import { db } from "../utils/init-firebase";
-
+import { Country}  from 'country-state-city';
 
 const AuthContext = createContext({
   currentUser: null,
   userInformation:null,
+  allCountry:null,
   register: () => Promise,
   login: () => Promise,
   logOut: () => Promise,
@@ -33,17 +34,33 @@ export default function AuthContextProvider({ children }) {
   const firestore = getFirestore(app);
   const [currentUser, setcurrentUser] = useState(null);
   const [userInformation, setUserInfo] = useState(null);
+  const [allCountry, setallCountry] = useState(null);
+
+
+const getAllCountry=()=>{
+    const countries= Country.getAllCountries()
+    setallCountry(countries)
+}
+
 
   useEffect(() => {
    const unsubscribe= onAuthStateChanged(auth,user=>{
         setcurrentUser(user)
       })
-      getUser()
-  
-    return () => {
-      unsubscribe()
+    
+  let cancel=true
+  if (cancel) {
+    getUser()
+    getAllCountry()
+  }
+
+return () => {
+  unsubscribe()
+  cancel=false
     };
   }, [currentUser]);
+
+
 
 
   const getUser= ()=>{
@@ -60,7 +77,7 @@ export default function AuthContextProvider({ children }) {
 
 
 
-  async function  register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance)  {
+  async function  register(email,password,Fname,Lname,Phone,address,facebook,instagram,gender,dateNaissance,country,city)  {
    // return createUserWithEmailAndPassword(auth, email, password);
     //==========================================
     const userInfo = await createUserWithEmailAndPassword(
@@ -72,7 +89,7 @@ export default function AuthContextProvider({ children }) {
     });
     //console.log(userInfo.user.uid);
     const docuRef = doc(firestore, `usersRoles/${userInfo.user.uid}`);
-    setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram,gender:gender,dateNaissance:dateNaissance});
+    setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram,gender:gender,dateNaissance:dateNaissance,country:country,city:city});
     return userInfo;
    
     //================================================
@@ -106,6 +123,7 @@ export default function AuthContextProvider({ children }) {
   const value = {
     currentUser,
     userInformation,
+    allCountry,
     register,
     login,
     logOut,
