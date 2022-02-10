@@ -148,19 +148,7 @@ useEffect(() => {
                 required
               />
             </FormControl>
-
-            <FormControl id="address">
-              <FormLabel>Address <Badge colorScheme="red">Required</Badge></FormLabel>
-              <Input
-                name="address"
-                type="text"
-                // autoComplete="email"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-              />
-            </FormControl>
-
+         
             <FormControl id="gender">
               <FormLabel>gender<Badge colorScheme="red">Required</Badge></FormLabel>
               <Select placeholder='Select option' 
@@ -213,6 +201,18 @@ useEffect(() => {
             </Select>
             </FormControl>
 {/* ===================================================== */}
+             <FormControl id="address">
+              <FormLabel>Address <Badge colorScheme="red">Required</Badge></FormLabel>
+              <Input
+                name="address"
+                type="text"
+                // autoComplete="email"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </FormControl>
+
             <FormControl id="dateNaissance">
               <FormLabel>date Naissance <Badge colorScheme="red">Required</Badge></FormLabel>
            

@@ -9,12 +9,14 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile
+  updateProfile,
+  sendEmailVerification 
 } from "firebase/auth";
 import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import { db } from "../utils/init-firebase";
 import { Country}  from 'country-state-city';
+import { useToast } from "@chakra-ui/react";
 
 const AuthContext = createContext({
   currentUser: null,
@@ -31,6 +33,7 @@ const AuthContext = createContext({
 export const useAuth = () => useContext(AuthContext);
 
 export default function AuthContextProvider({ children }) {
+  const toast = useToast();
   const firestore = getFirestore(app);
   const [currentUser, setcurrentUser] = useState(null);
   const [userInformation, setUserInfo] = useState(null);
@@ -87,6 +90,16 @@ return () => {
     ).then((user) => {
       return user;
     });
+       await sendEmailVerification(auth.currentUser)
+        .then(() => {
+          toast({
+            description: "Email verification sent!",
+            status: "success",
+            duration: "3000",
+            position:'top-right',
+            isClosable: true,
+          });
+        });
     //console.log(userInfo.user.uid);
     const docuRef = doc(firestore, `usersRoles/${userInfo.user.uid}`);
     setDoc(docuRef, { email:email,role:'user',Fname:Fname,Lname:Lname,Phone:Phone,address:address,facebook:facebook,instagram:instagram,gender:gender,dateNaissance:dateNaissance,country:country,city:city});
@@ -109,7 +122,6 @@ return () => {
       // url:'https://aljiwar-v1.netlify.app/login',
     })
   }
-
  function resetPassword(oobCode,newPassword){
    return confirmPasswordReset(auth,oobCode,newPassword)
  }

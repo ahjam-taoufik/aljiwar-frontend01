@@ -11,6 +11,8 @@ import {
   Button,
   Input,
   FormControl,
+  Container,
+  chakra,
 
 } from "@chakra-ui/react";
 
@@ -170,9 +172,9 @@ export default function Profilepage() {
         </Box>
       </Flex>
 
-      {/* <Container maxW="container.lg" overflowX="auto" py={4}>
+      <Container maxW="container.lg" overflowX="auto" py={4}>
         <chakra.pre>{JSON.stringify(currentUser, null, 2)}</chakra.pre>
-      </Container> */}
+      </Container>
     </Layout>
   );
 }
