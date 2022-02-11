@@ -61,6 +61,7 @@ export default function Loginpage() {
                 duration: "2000",
                 position:'top-right',
                 isClosable: true,
+                
               });
                 history.push(location.state?.from ?? "/profile");
               })
