@@ -13,7 +13,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.25.0",
     "country-state-city": "^3.0.1",
-    "firebase": "^9.6.5",
+    "firebase": "^9.9.4",
     "framer-motion": "^4.1.17",
     "moment": "^2.29.1",
     "react": "^17.0.2",
